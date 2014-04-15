@@ -13,6 +13,7 @@
             <li><a href="{{page.url}}">{{page.title}}</a></li>
           {% endfor %}
         </ul>
+        <a href="{% url 'rango:add_page' category_url %}">Add Page</a>
       {% else %}
         <strong>No Pages</strong>
       {% endif %}

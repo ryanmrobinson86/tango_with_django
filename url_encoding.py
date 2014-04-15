@@ -1,7 +1,5 @@
 def encode_url(url):
-    eurl = url.replace(' ','_')
-    return eurl
+    return url.replace(' ','_')
 
 def decode_url(url):
-    durl = url.replace('_',' ')
-    return durl
+    return url.replace('_',' ')
