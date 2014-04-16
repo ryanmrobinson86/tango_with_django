@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-{% load static %}
-<html>
-  <head>
-    <title>About Rango</title>
-  </head>
+{% extends 'rango/base.html' %}
 
-  <body>
-    <h1>Rango says...</h1>
-    {{ aboutmessage }}<br />
-    <a href="/rango/">Index</a><br />
-  </body>
-</html>
+{% block title_block %}About{% endblock %}
+
+{% block body_block %}
+  <h1>Rango says...</h1>
+  {{ aboutmessage }}<br />
+{% endblock %}

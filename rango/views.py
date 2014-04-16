@@ -1,4 +1,6 @@
 # Create your views here.
+from datetime import datetime
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -10,17 +12,40 @@ from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from url_encoding import *
 
+def count_visits(request, response):
+    visits = int(request.COOKIES.get('visits', '0'))
+
+    if request.COOKIES.has_key('last_visit'):
+        last_visit = request.COOKIES['last_visit']
+        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+
+        if (datetime.now() - last_visit_time).days > 0:
+            response.set_cookie('visits',visits+1)
+            response.set_cookie('last_visit',datetime.now())
+    else:
+        response.set_cookie('last_visit',datetime.now())
+        response.set_cookie('visits',1)
+    print "visits = ",visits
+    return
+
 def index(request):
     context = RequestContext(request)
     
     category_list = Category.objects.order_by('-likes')[:5]
     page_list = Page.objects.order_by('-views')[:5]
     context_dict = {'categories':category_list,'pages':page_list}
+
+    if 'error_message' in request.GET:
+        context_dict['error_message'] = request.GET['error_message'] 
     
     for category in category_list:
         category.url = encode_url(category.name)
+
+    response = render_to_response('rango/index.html',context_dict,context)
+
+    count_visits(request, response)
     
-    return render_to_response('rango/index.html',context_dict,context)
+    return response
 
 def category(request, category_name_url):
     context = RequestContext(request)
@@ -141,10 +166,10 @@ def user_login(request):
                 login(request, user)
                 return HttpResponseRedirect(request.POST['next'])
             else:
-                return HttpResponse("Your Rango account is disabled.")
+                error_message = 'Your Rango account is disabled'
         else:
-            print "Invalid login details: {0}, {1}".format(username,password)
-            return HttpResponse("Invalid login details supplied")
+            error_message = 'Invalid login details supplied'
+        return HttpResponseRedirect(reverse('rango:index')+'?error_message='+error_message)
 
     else:
         context_dict = {}
@@ -159,6 +184,3 @@ def user_logout(request):
     logout(request)
 
     return HttpResponseRedirect(reverse('rango:index'))
-@login_required
-def restricted(request):
-    return HttpResponse("Since you're loggied in, you can see this text!")
