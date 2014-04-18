@@ -12,21 +12,20 @@ from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from url_encoding import *
 
-def count_visits(request, response):
-    visits = int(request.COOKIES.get('visits', '0'))
+def count_visits(request):
 
-    if request.COOKIES.has_key('last_visit'):
-        last_visit = request.COOKIES['last_visit']
-        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+    if request.session.get('last_visit'):
+        last_visit_time = request.session.get('last_visit')
+        visits = request.session.get('visits', 0)
 
-        if (datetime.now() - last_visit_time).days > 0:
-            response.set_cookie('visits',visits+1)
-            response.set_cookie('last_visit',datetime.now())
+        if (datetime.now() - datetime.strptime(last_visit_time[:-7], "%Y-%m-%d %H:%M:%S")).days > 0:
+            request.session['visits'] = visits+1
+            request.session['last_visit'] = str(datetime.now())
     else:
-        response.set_cookie('last_visit',datetime.now())
-        response.set_cookie('visits',1)
+        visits = 0
+        request.session['visits'] = visits + 1
+        request.session['last_visit'] = str(datetime.now())
     print "visits = ",visits
-    return
 
 def index(request):
     context = RequestContext(request)
@@ -41,11 +40,9 @@ def index(request):
     for category in category_list:
         category.url = encode_url(category.name)
 
-    response = render_to_response('rango/index.html',context_dict,context)
-
-    count_visits(request, response)
+    count_visits(request)
     
-    return response
+    return render_to_response('rango/index.html',context_dict,context)
 
 def category(request, category_name_url):
     context = RequestContext(request)
@@ -65,7 +62,14 @@ def category(request, category_name_url):
 
 def about(request):
     context = RequestContext(request)
-    context_dict = {'aboutmessage':"The about page is served from the context"}
+    
+    visits = 0
+    if request.session.get('visits'):
+        visits = request.session.get('visits')
+    context_dict = {
+        'aboutmessage':"The about page is served from the context",
+        'visits':visits
+        }
     return render_to_response('rango/about.html',context_dict,context)
 
 @login_required()
