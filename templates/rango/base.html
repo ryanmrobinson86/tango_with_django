@@ -11,24 +11,62 @@
   </head>
 
   <body>
-    <div>
-      {% block error_block %}{% endblock %}
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="{% url 'rango:index' %}">Rango</a>
+
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-right">
+              {% if user.is_authenticated %}
+                <li class="navbar-text">Welcome, {{ user.username }}!</li>
+                <li><a href="{% url 'rango:logout' %}">Logout</a></li>
+              {% else %}
+                <li><a href="{% url 'rango:register' %}">Register Here</a></li>
+                <li><a href="{% url 'rango:login' %}">Login</a></li>
+              {% endif %}
+            </ul>
+            <ul class="nav pull-right">
+              <li><a href="{% url 'rango:about' %}">About</a></li>
+            </ul>
+          </div>
+          <!--/.nav-collapse -->
+        </div>
+      </div>
     </div>
-    <div>
-      {% block body_block %}{% endblock %}
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+          </div>
+          <!--/.well -->
+        </div>
+        <!--/span-->
+        <div class="alert-error">
+          {% block error_block %}{% endblock %}
+        </div>
+        <!--/span-->
+        <div class="span9">
+          {% block body_block %}{% endblock %}
+        </div>
+        <!--/span-->
+      </div>
+      <!--/row-->
     </div>
+    <!--/.fluid-container-->
+
     <hr/>
-    <div>
-      <ul>
-        <li><a href="{% url 'rango:index' %}">Rango</a></li>
-        {% if user.is_authenticated %}
-          <li><a href="{% url 'rango:logout' %}">Logout</a></li>
-        {% else %}
-          <li><a href="{% url 'rango:register' %}">Register Here</a></li>
-          <li><a href="{% url 'rango:login' %}">Login</a></li>
-        {% endif %}
-      </ul>
-    </div>
+
+    <footer>
+      <div class="containter">
+        <p>&copy; Rango: How to Tango with Django 2013, built by Ryan Robinson</p>
+      </div>
+    </footer>
 
     <script src="{% static 'js/jquery-2.1.0.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>

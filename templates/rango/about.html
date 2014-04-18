@@ -3,7 +3,9 @@
 {% block title_block %}About{% endblock %}
 
 {% block body_block %}
-  <h1>Rango says...</h1>
-  {{ aboutmessage }}<br />
-  <p>You've visited this site {{ visits }} days.</p>
+  <div class="hero-unit">
+    <h1>Rango says...</h1>
+    {{ aboutmessage }}<br />
+    <p>You've visited this site {{ visits }} days.</p>
+  </div>
 {% endblock %}
