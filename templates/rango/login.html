@@ -2,18 +2,25 @@
 
 {% block title_block %}Login{% endblock %}
 
+{% block error_block %}
+  <div class="span12 alert-block"><p class="alert-error">{{ error_message }}</p></div>
+{% endblock %}
+
 {% block body_block %}
   <div class="hero-unit">
     <h1>Login to Rango</h1>
 
-    {% url 'rango:login' as action_url %}
-    <form id="login_form" method="post" action="{{ action_url }}">
-      {% csrf_token %}
-      <input type="hidden" name="next" value="{{next_u}}" />
-      Username: <input type="text" name="username" value="" size="50" /><br/>
-      Password: <input type="password" name="password" value="" size="50" /><br/>
+    <div class="container">
+      <form class="form-signin span4" id="login_form" method="post" action="{% url 'rango:login' %}">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        {% csrf_token %}
 
-      <input type="submit" value="Submit" /><br/>
-    </form>
+        <input type="hidden" name="next" value="{{next_u}}" />
+        Username: <input type="text" class="input-block-level" placeholder="Username" name="username" value="" size="50" /><br/>
+        Password: <input type="password" class="input-block-level" name="password" value="" size="50" /><br/>
+
+        <button class="btn btn-primary" type="submit" />Sign In</button>
+      </form>
+    </div>
   </div>
 {% endblock %}

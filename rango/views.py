@@ -173,14 +173,17 @@ def user_login(request):
                 error_message = 'Your Rango account is disabled'
         else:
             error_message = 'Invalid login details supplied'
-        return HttpResponseRedirect(reverse('rango:index')+'?error_message='+error_message)
+        return HttpResponseRedirect(reverse('rango:login')+'?error_message='+error_message)
 
     else:
         context_dict = {}
-        if request.GET and request.GET['next']:
-            context_dict = {'next_u':request.GET['next']}
+        if 'error_message' in request.GET:
+            context_dict['error_message'] = request.GET['error_message'] 
+        if request.GET and request.GET.has_key('next'):
+            context_dict['next_u'] = request.GET['next']
         else:
-            context_dict = {'next_u':reverse('rango:index')}
+            context_dict['next_u'] = reverse('rango:index')
+        print context_dict
         return render_to_response('rango/login.html',context_dict,context)
 
 @login_required
