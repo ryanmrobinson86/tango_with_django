@@ -31,13 +31,18 @@ class PageForm(forms.ModelForm):
         fields = ('title','url','views')
 
 class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
+    password = forms.CharField(widget=forms.PasswordInput(), help_text="Please enter a password")
+    email = forms.CharField(help_text="Please enter your email")
+    username = forms.CharField(help_text="Please enter a username")
 
     class Meta:
         model = User
         fields = ('username', 'email', 'password')
 
 class UserProfileForm(forms.ModelForm):
+    website = forms.URLField(help_text="Please enter your website", required=False)
+    picture = forms.ImageField(help_text="Select a profile image", required=False)
+
     class Meta:
         model = UserProfile
         fields = ('website','picture')

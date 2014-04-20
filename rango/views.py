@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response
 
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from rango.bing_search import run_query
 from url_encoding import *
 
 def count_visits(request):
@@ -41,7 +42,7 @@ def index(request):
         category.url = encode_url(category.name)
 
     count_visits(request)
-    
+
     return render_to_response('rango/index.html',context_dict,context)
 
 def category(request, category_name_url):
@@ -191,3 +192,15 @@ def user_logout(request):
     logout(request)
 
     return HttpResponseRedirect(reverse('rango:index'))
+
+def search(request):
+    context = RequestContext(request)
+    result_list = []
+
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+
+        if query:
+            result_list = run_query(query)
+
+    return render_to_response('rango/search.html',{'result_list':result_list},context)

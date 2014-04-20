@@ -5,21 +5,31 @@
 {% block body_block %}
   <div class="hero-unit">
     <h1>Register with Rango</h1>
+    <br/>
 
     {% if registered %}
-      Rango says: <strong>thank you for registering!</strong>
-      <a href="{% url 'rango:index' %}">Return to index</a>
+      <p><strong>thank you for registering!</strong></p>
+      <p><a href="{% url 'rango:login' %}">Login</a> when you're ready to Rango!</p>
     {% else %}
-      Rango says: <strong>register here!</strong><br/>
+      <div class="container">
+        <form class="form-signin" id="user_form" method="post" action="{% url 'rango:register' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <h2 class="form-signin-heading">Sign up Here</h2>
+          {% for field in user_form.visible_fields %}
+            {{ field.errors }}
+            {{ field.help_text }}<br/>
+            {{ field }}<br/>
+          {% endfor %}
 
-      <form id="user_form" method="post" action="{% url 'rango:register' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        {{ user_form.as_p }}
-        {{ profile_form.as_p }}
-
-        <input type="submit" name="submit" value="Register"/>
-      </form>
+          {%for field in profile_form.visible_fields %}
+            {{ field.errors }}
+            {{ field.help_text }}<br/>
+            {{ field }}<br>
+          {% endfor %}
+          <br/>
+          <button class="btn btn-primary" type="submit" name="submit">Register</button>
+        </form>
+      </div>
     {% endif %}
   </div>
 {% endblock %}
