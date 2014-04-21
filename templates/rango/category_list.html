@@ -1,0 +1,20 @@
+<div>
+  {% if category_list %}
+    <h4>Top Five Categories</h4>
+    <ul>
+      {% for category in category_list %}
+        <li><a href="{% url 'rango:category' category.url %}">{{ category.name}}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+<div>
+  {% if page_list %}
+    <h5>Top Five Pages</h5> 
+    <ul>
+      {% for page in page_list %}
+        <li><small><a href="{% url 'rango:track_url' page.id %}">{{ page.title }}</a> - {{ page.views }} view(s)</small></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>

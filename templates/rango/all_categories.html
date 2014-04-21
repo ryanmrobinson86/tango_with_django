@@ -1,0 +1,19 @@
+{% extends 'rango/base.html' %}
+
+{% block title_block %}All Categores{% endblock %}
+
+{% block body_block %}
+  {% if all_categories %}
+    <div class="container">
+      <h1>All Categories</h1>
+      <ol>
+        {% for category in all_categories %}
+          <li><a href="{% url 'rango:category' category.url %}">{{ category.name }}</a></li>
+        {% endfor %}
+      </ol>
+      <a href="{% url 'rango:add_category' %}">AddCategory</a>
+    </div>
+  {% else %}
+    <h2>No Categories</h2>
+  {% endif %}
+{% endblock %}

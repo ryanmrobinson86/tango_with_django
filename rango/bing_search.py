@@ -1,6 +1,8 @@
 import json
 import urllib, urllib2
 
+from sys import argv
+
 def run_query(search_terms):
     root_url = 'https://api.datamarket.azure.com/Bing/Search/'
     source = 'Web'
@@ -37,8 +39,9 @@ def run_query(search_terms):
 
     return results
 
-def main():
-    query = raw_input("Enter a search query:")
+def main(query=""):
+    if not query:
+        query = raw_input("Enter a search query:")
 
     if query:
         results = run_query(query)
@@ -50,3 +53,9 @@ def main():
             print "\t", result['summary']
 
     return
+
+if __name__ == "__main__":
+    try:
+        main(argv[1])
+    except:
+        main()
