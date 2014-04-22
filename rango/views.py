@@ -291,3 +291,21 @@ def track_url(request, page_num):
         return redirect(page.url)
     except:
         return redirect(reverse('rango:index')+'?error_message=Invalid Page')
+
+@login_required
+def like_category(request):
+    context = RequestContext(request)
+    cat_id = None
+
+    if request.GET.has_key('category_id'):
+        cat_id = request.GET['category_id']
+    
+    likes = 0
+    if cat_id:
+        category = Category.objects.get(pk=int(cat_id))
+        if category:
+            likes = category.likes + 1
+            category.likes = likes
+            category.save()
+
+    return HttpResponse(likes)

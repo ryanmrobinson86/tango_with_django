@@ -5,6 +5,12 @@
 {% block body_block %}
   <div class="hero-unit">
     <h1>{{ category_name }}</h1>
+    <div id="like-count">
+      <b>{{ category.likes }} likes</b>
+      {% if user.is_authenticated %}
+        <button class="btn btn-mini btn-primary" id="likes" data-catid="{{ category.id }}" type="button">Like</button>
+      {% endif %}
+    </div>
   </div>
   <div class="row-fluid">
     {% if category %}
