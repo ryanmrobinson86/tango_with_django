@@ -15,4 +15,6 @@ urlpatterns = patterns('',
     url(r'^profile/(?P<uName>\w+)/$', views.profile, name="profile"),
     url(r'^goto/(?P<page_num>\w+)/$', views.track_url, name="track_url"),
     url(r'^like_category/$', views.like_category, name="like_category"),
+    url(r'^suggest_category/$', views.suggest_category, name="suggest_category"),
+    url(r'^quick-add-page/$', views.quick_add_page, name="quick_add"),
     )

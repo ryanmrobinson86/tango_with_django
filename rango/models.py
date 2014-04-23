@@ -10,6 +10,10 @@ class Category(models.Model):
     def __unicode__(self):
         return self.name
 
+class CategryLikes(models.Model):
+    user = models.ForeignKey(User)
+    cat = models.ForeignKey(Category)
+
 class Page(models.Model):
     category = models.ForeignKey(Category)
     title = models.CharField(max_length=128)
@@ -21,7 +25,6 @@ class Page(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
 

@@ -5,24 +5,15 @@
 {% block body_block %}
   <div class="hero-unit">
     <h1>{{ category_name }}</h1>
-    <div id="like-count">
-      <b>{{ category.likes }} likes</b>
-      {% if user.is_authenticated %}
-        <button class="btn btn-mini btn-primary" id="likes" data-catid="{{ category.id }}" type="button">Like</button>
-      {% endif %}
+    <div id="cat-like-div">
+      {% include "rango/ajax/cat-like-div.html" %}
     </div>
   </div>
   <div class="row-fluid">
     {% if category %}
-      {%if pages %}
-        <ol>
-          {% for page in pages %}
-            <li><a href="{% url 'rango:track_url' page.id %}">{{page.title}}</a> - {{ page.views }} view(s)</li>
-          {% endfor %}
-        </ol>
-      {% else %}
-        <strong>No Pages</strong>
-      {% endif %}
+      <div id="cat-pages">
+        {% include "rango/ajax/category_page_list.html" %}
+      </div>
       <a href="{% url 'rango:add_page' category_url %}">Add Page</a><br/><br />
     {% else %}
       The specified category {{ category.name }} does not exist!
@@ -37,11 +28,18 @@
     </form>
     {% if result_list %}
       <div style="clear: both;">
-        <ol>
+        <ul class="unstyled">
           {% for result in result_list %}
             <li>
-              <strong><a href="{% url 'rango:add_page' category_url %}?title={{ result.title }}&url={{ result.link }}">{{ result.title }}</a></strong><br />
-              <em>{{ result.summary }}</em>
+              <table class="search-table">
+                <tr>
+                  <td><button class="btn btn-mini quick-add" data-cat="{{ category_url }}" data-title="{{ result.title }}" data-url="{{ result.link }}">Add</button></td>
+                  <td>
+                    <strong><a href="{{ result.link }}">{{ result.title }}</a></strong><br />
+                    <em>{{ result.summary }}</em>
+                  </td>
+                </tr>
+              </table>
             </li>
           {% endfor %}
         </ol>

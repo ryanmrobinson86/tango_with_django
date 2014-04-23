@@ -26,10 +26,10 @@
             <ul class="nav pull-right">
               {% if user.is_authenticated %}
                 <li><p class="navbar-text">Welcome, <a class="navbar-link" href="{% url 'rango:profile' user.username %}">{{ user.username }}!</a></p></li>
-                <li><a href="{% url 'rango:logout' %}">Logout</a></li>
+                <li><a href="{% url 'rango:logout' %}?next={{ request.get_full_path }}">Logout</a></li>
               {% else %}
                 <li><a href="{% url 'rango:register' %}">Register Here</a></li>
-                <li><a href="{% url 'rango:login' %}">Login</a></li>
+                <li><a href="{% url 'rango:login' %}?next={{ request.get_full_path }}">Login</a></li>
               {% endif %}
             </ul>
             <ul class="nav pull-right">
@@ -45,9 +45,12 @@
         <div class="row-fluid">
           <div class="span3">
             <div class="well sidebar-nav">
-            {% block sidebar_nav %}
-              {% include "rango/category_list.html" %}
-            {% endblock %}
+              {% block sidebar_nav %}
+                <input type="text" id="cat_suggestion" class="input-medium search-query" value="" name="cat_suggestion" />
+                <div id="cats">
+                  {% include "rango/category_list.html" %}
+                </div>
+              {% endblock %}
             </div>
             <!--/.well -->
           </div>
@@ -66,7 +69,7 @@
 
       <footer>
         <div class="containter">
-          <p>&copy; Rango: How to Tango with Django 2013, built by Ryan Robinson</p>
+          <p>&copy; Rango: How to Tango with Django 2013, built by Ryan Robinson, 2014</p>
         </div>
       </footer>
 

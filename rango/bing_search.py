@@ -12,7 +12,6 @@ def run_query(search_terms):
     query = urllib.quote(query)
     search_url = "{0}{1}?$format=json&$top={2}&$skip={3}&Query={4}".format(
         root_url,source,results_per_page,offset,query)
-    print search_url
 
     username = ''
     bing_api_key = 'T8ktKQ13zvOo+1ahsAKD+1GZu0G7D5URJzNVk9hCKk0'
