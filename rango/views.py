@@ -213,7 +213,7 @@ def quick_add_page(request):
 
     if request.GET.has_key('cat') and request.GET.has_key('url') and request.GET.has_key('title'):
         try:
-            cat_id = Category.objects.get(name=request.GET['cat'])
+            cat_id = Category.objects.get(name=decode_url(request.GET['cat']))
             try:
                 page = Page.objects.get(title=request.GET['title'])
             except:
